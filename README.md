@@ -43,10 +43,10 @@
 
 | Layer | Technology |
 |-------|-----------|
-| **Frontend** | React.js, Tailwind CSS |
+| **Frontend** | React.js, Tailwind CSS, SASS|
 | **Backend** | Node.js, Express.js |
 | **Database** | MongoDB Atlas, Mongoose |
-| **Authentication** | JWT (JSON Web Tokens) |
+| **Authentication** | JWT (JSON Web Tokens),TokenBlackListing |
 | **AI / LLM** | Google Gemini API / OpenAI GPT |
 | **File Handling** | Multer, pdf-parse, mammoth |
 | **State Management** | Context API / Redux |
@@ -114,7 +114,7 @@ InterviewAI/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/RishuRajdev/InterviewAI.git
+git clone https://github.com/RishuRajxdev/InterviewAI.git
 cd InterviewAI
 ```
 

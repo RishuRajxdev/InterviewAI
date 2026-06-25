@@ -4,12 +4,17 @@ const userModel = require("../models/user.model.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const tokenBlackListModel = require("../models/blacklist.model.js");
-
+/**
+ * 
+ * @name registerUserController
+ * @description register a new user, expects username,email and password
+ * @returns PUBLIC
+ */
 async function registerUserController(req, res) {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
     return res.status(400).json({
-      message: "Please Provide the email and password",
+      message: "Please Provide the username,email and password",
     });
   }
   const isUserAlreadyExist = await userModel.findOne({
@@ -17,7 +22,7 @@ async function registerUserController(req, res) {
   });
   if (isUserAlreadyExist) {
     return res.status(400).json({
-      message: "Account already Exists ",
+      message: `Account already exists ${isUserAlreadyExist.username= username}`,
     });
   }
   const hash = await bcrypt.hash(password, 10);
@@ -33,8 +38,8 @@ async function registerUserController(req, res) {
     { expiresIn: "1d" },
   );
   res.cookie("token", token);
-  res.status(200).json({
-    message: "user successfully registered",
+  res.status(201).json({
+    message: "User successfully registered",
     user: {
       id: user._id,
       username: user.username,
@@ -42,6 +47,13 @@ async function registerUserController(req, res) {
     },
   });
 }
+/**
+ 
+ * @name  loginUserController
+ * @description  login a user, expoects email and password in the request body
+ * @access Public
+ */
+
 
 async function loginUserController(req, res) {
   const { email, password } = req.body;
@@ -72,6 +84,10 @@ async function loginUserController(req, res) {
     },
   });
 }
+/**
+ * @name logoutUserController
+ * @description Logut the user and set the token in Blacklist.
+ */
 async function logoutUserController(req, res) {
   const token = req.cookies.token;
   if (token) {
@@ -82,7 +98,10 @@ async function logoutUserController(req, res) {
     message: "User logged out successfully",
   });
 }
-
+/**
+ * 
+ *@description Get the current logged user. 
+ */
 async function getMeController(req, res) {
   const user = await userModel.findById(req.user.id);
   res.status(200).json({

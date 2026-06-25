@@ -8,7 +8,7 @@ async function authUser(req, res, next) {
       message: "Token not provided",
     });
   }
-
+// if we get the token will check if its blacklisted or not.
   const isTokenBlacklisted = await tokenBlackListModel.findOne({ token });
   if (isTokenBlacklisted) {
     return res.staus(401).json({
@@ -17,12 +17,12 @@ async function authUser(req, res, next) {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);//Throws Errror if not verified or Expired Token.
+    req.user = decoded;//New Property add req.user and added the decoded data.
     next();
   } catch (error) {
     return res.status(401).json({
-      message: "InvalidToken",
+      message: "Invalid Token",
     });
   }
 }
