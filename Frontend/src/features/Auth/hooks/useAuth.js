@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
+import toast from "react-hot-toast";
 import { AuthContext } from "../auth.context";
-import { login, register, logout, getMe } from "../services/auth.api";
+import { login, register, logout, getMe } from "../services/auth.api.js";
 
 
 
@@ -10,25 +11,33 @@ export const useAuth = () => {
     const { user, setUser, loading, setLoading } = context
 
 
-    const handleLogin = async ({ email, password }) => {
-        setLoading(true)
-        try {
-            const data = await login({ email, password })
-            setUser(data.user)
-        } catch (err) {
-
-        } finally {
-            setLoading(false)
-        }
+   const handleLogin = async ({ identifier, password }) => {
+    setLoading(true)
+    try {
+        const data = await login({ identifier, password })
+        setUser(data.user)
+        toast.success("Logged in successfully")
+        return true
+    } catch (err) {
+        const message = err?.response?.data?.message || "Login failed. Please try again."
+        toast.error(message)
+        return false
+    } finally {
+        setLoading(false)
     }
+}
 
     const handleRegister = async ({ username, email, password }) => {
         setLoading(true)
         try {
             const data = await register({ username, email, password })
             setUser(data.user)
+            toast.success("Account created successfully")
+            return true
         } catch (err) {
-
+            const message = err?.response?.data?.message || "Registration failed. Please try again."
+            toast.error(message)
+            return false
         } finally {
             setLoading(false)
         }
@@ -37,10 +46,14 @@ export const useAuth = () => {
     const handleLogout = async () => {
         setLoading(true)
         try {
-            const data = await logout()
+            await logout()
             setUser(null)
+            toast.success("Logged out")
+            return true
         } catch (err) {
-
+            const message = err?.response?.data?.message || "Logout failed. Please try again."
+            toast.error(message)
+            return false
         } finally {
             setLoading(false)
         }
@@ -50,10 +63,12 @@ export const useAuth = () => {
 
         const getAndSetUser = async () => {
             try {
-
                 const data = await getMe()
                 setUser(data.user)
-            } catch (err) { } finally {
+            } catch (err) {
+                // Expected when no one is logged in yet — stay silent, no toast
+                setUser(null)
+            } finally {
                 setLoading(false)
             }
         }

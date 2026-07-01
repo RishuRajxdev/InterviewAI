@@ -434,3 +434,54 @@ $severity-low: #3fb950;
     &--medium { color: $severity-medium; background-color: rgba($severity-medium, 0.05); }
     &--low { color: $severity-low; background-color: rgba($severity-low, 0.05); }
 }
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        $bg-panel 25%,
+        rgba($text-muted, 0.08) 50%,
+        $bg-panel 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-pulse 1.4s ease-in-out infinite;
+    border-radius: 0.5rem;
+
+    &--nav-item {
+        height: 38px;
+        margin-bottom: 0.5rem;
+    }
+
+    &--button {
+        height: 42px;
+        width: 100%;
+    }
+
+    &--header {
+        height: 28px;
+        width: 60%;
+        margin-bottom: 1.5rem;
+    }
+
+    &--card {
+        height: 64px;
+        margin-bottom: 0.75rem;
+        border-radius: 0.6rem;
+    }
+
+    &--ring {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        margin: 0 auto;
+    }
+
+    &--tag {
+        height: 32px;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+
+@keyframes skeleton-pulse {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}

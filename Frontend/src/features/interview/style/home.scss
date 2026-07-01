@@ -396,3 +396,75 @@ $radius-md:      4px;
         }
     }
 }
+.dropzone {
+    &--filled {
+        border-style: solid;
+        border-color: $text-primary;
+        background-color: $bg-input;
+
+        .dropzone__icon {
+            color: #4ade80; // green checkmark to signal success
+        }
+
+        .dropzone__title {
+            color: $text-primary;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+}
+
+.generate-btn {
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+
+        &:active {
+            transform: none;
+        }
+    }
+}
+
+.btn-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-top-color: $bg-page;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+.report-item {
+    position: relative;
+
+    &__delete {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: transparent;
+        border: 1px solid $border-color;
+        border-radius: 50%;
+        color: $text-muted;
+        cursor: pointer;
+        transition: all 0.15s ease;
+
+        &:hover {
+            background-color: rgba(#f85149, 0.1);
+            border-color: #f85149;
+            color: #f85149;
+        }
+    }
+}

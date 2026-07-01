@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import '../style/interview.scss'
 import { useInterview } from '../hooks/useInterview.js'
-import { useNavigate, useParams } from 'react-router'
+import { useParams } from 'react-router'
 
 
 
@@ -56,26 +56,52 @@ const RoadMapDay = ({ day }) => (
     </div>
 )
 
+const InterviewSkeleton = () => (
+    <div className='interview-page'>
+        <div className='interview-layout'>
+
+            <nav className='interview-nav'>
+                <div className="nav-content">
+                    <p className='interview-nav__label'>Sections</p>
+                    {[ 1, 2, 3 ].map(i => (
+                        <div key={i} className='skeleton skeleton--nav-item' />
+                    ))}
+                </div>
+                <div className='skeleton skeleton--button' />
+            </nav>
+
+            <div className='interview-divider' />
+
+            <main className='interview-content'>
+                <div className='skeleton skeleton--header' />
+                <div className='q-list'>
+                    {[ 1, 2, 3 ].map(i => (
+                        <div key={i} className='skeleton skeleton--card' />
+                    ))}
+                </div>
+            </main>
+
+            <div className='interview-divider' />
+
+            <aside className='interview-sidebar'>
+                <div className='skeleton skeleton--ring' />
+                <div className='sidebar-divider' />
+                <div className='skeleton skeleton--tag' />
+                <div className='skeleton skeleton--tag' />
+                <div className='skeleton skeleton--tag' />
+            </aside>
+        </div>
+    </div>
+)
+
 // ── Main Component ────────────────────────────────────────────────────────────
 const Interview = () => {
     const [ activeNav, setActiveNav ] = useState('technical')
-    const { report, getReportById, loading, getResumePdf } = useInterview()
+    const { report, loading, getResumePdf } = useInterview()
     const { interviewId } = useParams()
 
-    useEffect(() => {
-        if (interviewId) {
-            getReportById(interviewId)
-        }
-    }, [ interviewId ])
-
-
-
     if (loading || !report) {
-        return (
-            <main className='loading-screen'>
-                <h1>Loading your interview plan...</h1>
-            </main>
-        )
+        return <InterviewSkeleton />
     }
 
     const scoreColor =
