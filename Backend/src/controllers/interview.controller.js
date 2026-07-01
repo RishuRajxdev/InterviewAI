@@ -1,11 +1,8 @@
-// FIXED: Imported directly without the curly braces
 const pdfParse = require('pdf-parse');
 const { generateInterviewReport, generateResumePdf } = require("../services/ai.service");
 const interviewReportModel = require("../models/interviewReport.model");
 
-// ─────────────────────────────────────────────────────────────────
-// SANITIZER — Normalizes Gemini's output before it touches Mongoose
-// ─────────────────────────────────────────────────────────────────
+//Sanitization of Gemini Responses..
 function parseIfString(item) {
     if (typeof item === "string") {
         try { return JSON.parse(item) } catch { return null }
@@ -81,7 +78,6 @@ function sanitizeAiResponse(raw) {
         title:               raw.title || raw.job_applied_for || raw.applied_position || "Target Role",
         matchScore:          typeof raw.matchScore === "number" ? raw.matchScore : (parseInt(raw.matchScore) || 0),
         
-        // FIXED: Added massive fallbacks for all the random keys Gemini likes to use
         technicalQuestions:  sanitizeQuestions(raw.technicalQuestions || raw.interview_questions_suggested || raw.technical_questions),
         behavioralQuestions: sanitizeQuestions(raw.behavioralQuestions || raw.behavioral_questions),
         skillGaps:           sanitizeSkillGaps(raw.skillGaps || raw.skills_gaps || raw.gaps_identified || raw.skills_evaluation_unmentioned_or_missing_skills),
@@ -89,33 +85,27 @@ function sanitizeAiResponse(raw) {
     }
 }
 
-// ─────────────────────────────────────────────────────────────────
-// CONTROLLERS
-// ─────────────────────────────────────────────────────────────────
+
 
 /**
  * @description Generate interview report based on resume, self description, and job description.
  */
 async function generateInterViewReportController(req, res) {
     try {
-        // FIXED: Calling pdfParse directly as a function properly
         const resumeContent = await (new pdfParse.PDFParse(Uint8Array.from(req.file.buffer))).getText()
         const resumeText = resumeContent.text
 
         const { selfDescription, jobDescription } = req.body
 
-        // 1. Get raw AI response
         const rawAiResponse = await generateInterviewReport({
             resume: resumeText,
             selfDescription,
             jobDescription,
         })
 
-        // 2. Sanitize — normalize all fields to match Mongoose schema
         const sanitized = sanitizeAiResponse(rawAiResponse)
         console.log("Sanitized report:", JSON.stringify(sanitized, null, 2))
 
-        // 3. Save to DB
         const interviewReport = await interviewReportModel.create({
             user:            req.user.id,
             resume:          resumeText,
@@ -197,9 +187,38 @@ async function generateResumePdfController(req, res) {
     res.send(pdfBuffer)
 }
 
+/**
+ * @description Delete an interview report by ID.
+ */
+async function deleteInterviewReportController(req, res) {
+    try {
+        const { interviewId } = req.params
+
+        const interviewReport = await interviewReportModel.findOneAndDelete({
+            _id: interviewId,
+            user: req.user.id,
+        })
+
+        if (!interviewReport) {
+            return res.status(404).json({ message: "Interview report not found." })
+        }
+
+        res.status(200).json({
+            message: "Interview report deleted successfully.",
+        })
+    } catch (error) {
+        console.error("Failed to delete report:", error)
+        res.status(500).json({
+            message: "An error occurred while deleting the report.",
+            error: error.message,
+        })
+    }
+}
+
 module.exports = {
     generateInterViewReportController,
     getInterviewReportByIdController,
     getAllInterviewReportsController,
     generateResumePdfController,
+    deleteInterviewReportController,
 }

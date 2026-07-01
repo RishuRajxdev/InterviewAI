@@ -7,11 +7,7 @@ const ai = new GoogleGenAI({
     apiKey: process.env.GOOGLE_GENAI_API_KEY
 })
 
-// ─────────────────────────────────────────────
-// MANUAL RESPONSE SCHEMA (plain object — no zod conversion)
-// zodToJsonSchema was confusing Gemini into returning
-// float vectors instead of objects inside arrays.
-// ─────────────────────────────────────────────
+
 const interviewReportResponseSchema = {
     type: "object",
     properties: {
@@ -68,9 +64,7 @@ const interviewReportResponseSchema = {
     required: ["title", "matchScore", "technicalQuestions", "behavioralQuestions", "skillGaps", "preparationPlan"],
 }
 
-// ─────────────────────────────────────────────
-// generateInterviewReport
-// ─────────────────────────────────────────────
+
 async function generateInterviewReport({ resume, selfDescription, jobDescription }) {
 
     const prompt = `You are an expert technical interviewer and career coach.
@@ -105,9 +99,6 @@ ${jobDescription}`
     return parsed
 }
 
-// ─────────────────────────────────────────────
-// generateResumePdf
-// ─────────────────────────────────────────────
 const resumeHtmlSchema = z.object({
     html: z.string().describe(
         "Complete, self-contained HTML document for a professional resume. " +
@@ -159,9 +150,10 @@ Rules:
     return pdfBuffer
 }
 
-// ─────────────────────────────────────────────
-// Puppeteer helper
-// ─────────────────────────────────────────────
+/**
+ * 
+ * @description: Defining PDF format here.
+ */
 async function generatePdfFromHtml(htmlContent) {
     const browser = await puppeteer.launch({ args: ["--no-sandbox"] })
     const page = await browser.newPage()

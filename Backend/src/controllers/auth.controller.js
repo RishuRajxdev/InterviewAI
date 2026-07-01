@@ -57,28 +57,47 @@ async function registerUserController(req, res) {
 }
 
 
+
 /**
  * @name loginUserController
- * @description login a user, expects email and password in the request body
+ * @description login a user, expects identifier (email or username) and password in the request body
+ * @access Public
+ */
+/**
+ * @name loginUserController
+ * @description login a user, expects username and password in the request body
+ * @access Public
+ */
+/**
+ * @name loginUserController
+ * @description login a user, expects identifier (email or username) and password in the request body
  * @access Public
  */
 async function loginUserController(req, res) {
 
-    const { email, password } = req.body
+    const { identifier, password } = req.body
 
-    const user = await userModel.findOne({ email })
-
-    if (!user) {
+    if (!identifier || !password) {
         return res.status(400).json({
-            message: "Invalid email or password"
+            message: "Please provide email/username and password"
         })
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password)
+    const user = await userModel.findOne({
+        $or: [ { email: identifier }, { username: identifier } ]
+    })
+
+    if (!user) {
+        return res.status(400).json({
+            message: "Invalid email/username or password"
+        })
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
         return res.status(400).json({
-            message: "Invalid email or password"
+            message: "Invalid email/username or password"
         })
     }
 
@@ -88,7 +107,13 @@ async function loginUserController(req, res) {
         { expiresIn: "1d" }
     )
 
-    res.cookie("token", token)
+    res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        maxAge: 24 * 60 * 60 * 1000
+    })
+
     res.status(200).json({
         message: "User loggedIn successfully.",
         user: {
@@ -98,9 +123,7 @@ async function loginUserController(req, res) {
         }
     })
 }
-
-
-/**
+/** 
  * @name logoutUserController
  * @description clear token from user cookie and add the token in blacklist
  * @access public
