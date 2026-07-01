@@ -1,4 +1,5 @@
 import React from 'react'
+import { Loader2 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { Navigate } from "react-router";
 
@@ -8,11 +9,7 @@ const Protected = ({children}) => {
 if (loading) {
     return (
         <main className="flex min-h-screen items-center justify-center">
-            <div className="w-64 space-y-3 animate-pulse">
-                <div className="h-4 rounded bg-slate-800 w-3/4" />
-                <div className="h-4 rounded bg-slate-800 w-full" />
-                <div className="h-4 rounded bg-slate-800 w-5/6" />
-            </div>
+            <Loader2 className="h-12 w-12 animate-spin text-cyan-500" />
         </main>
     )
 }

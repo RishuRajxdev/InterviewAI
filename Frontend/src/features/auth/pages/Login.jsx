@@ -14,16 +14,17 @@ const Login = () => {
             navigate('/')
         }
     }
-    if(loading){
-        return (
-            <main>
-                <div className="loading-screen">
-                    <div className="spinner"></div>
-                    <p>Please wait...</p>
-                </div>
-            </main>
-        )
-    }
+    if (loading) {
+    return (
+        <main className="flex min-h-screen items-center justify-center">
+            <div className="loading-screen text-center">
+              
+                <div className="spinner border-4 border-t-cyan-500 border-cyan-600 rounded-full h-12 w-12 animate-spin"></div>
+                <p className="text-cyan-600 mt-4 font-semibold">Please wait...</p>
+            </div>
+        </main>
+    )
+}
     return (
         <main>
             <div className="form-container">
