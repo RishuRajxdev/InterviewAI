@@ -1,4 +1,3 @@
-const pdfParse = require('pdf-parse');
 const { generateInterviewReport, generateResumePdf } = require("../services/ai.service");
 const interviewReportModel = require("../models/interviewReport.model");
 
@@ -92,8 +91,10 @@ function sanitizeAiResponse(raw) {
  */
 async function generateInterViewReportController(req, res) {
     try {
-        const resumeContent = await (new pdfParse.PDFParse(Uint8Array.from(req.file.buffer))).getText()
-        const resumeText = resumeContent.text
+        const { extractText, getDocumentProxy } = await import('unpdf')
+        const pdf = await getDocumentProxy(Uint8Array.from(req.file.buffer))
+        const { text } = await extractText(pdf, { mergePages: true })
+        const resumeText = text
 
         const { selfDescription, jobDescription } = req.body
 
