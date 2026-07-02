@@ -5,8 +5,6 @@ import { useInterview } from '../../interview/hooks/useInterview.js'
 import { useNavigate } from 'react-router'
 import { Sparkles, Loader2 } from 'lucide-react'
 
-
-
 const Home = () => {
 
     const { loading, generateReport, reports, deleteReport } = useInterview()
@@ -61,7 +59,7 @@ const Home = () => {
 
     return (
         <div className='home-page min-h-screen w-full overflow-x-hidden'>
-    <div className='w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 flex flex-col items-center'>
+            <div className='w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 flex flex-col items-center'>
 
                 {/* Page Header */}
                 <header className='page-header'>
@@ -82,14 +80,16 @@ const Home = () => {
                                 <h2>Target Job Description</h2>
                                 <span className='badge badge--required'>Required</span>
                             </div>
-                            <textarea
-                                value={jobDescription}
-                                onChange={(e) => { setJobDescription(e.target.value) }}
-                                className='panel__textarea'
-                                placeholder={`Paste the full job description here...\ne.g. 'Senior Frontend Engineer at Google requires proficiency in React, TypeScript, and large-scale system design...'`}
-                                maxLength={5000}
-                            />
-                            <div className='char-counter'>{jobDescription.length} / 5000 chars</div>
+                            <div className='textarea-wrapper'>
+                                <textarea
+                                    value={jobDescription}
+                                    onChange={(e) => { setJobDescription(e.target.value) }}
+                                    className='panel__textarea'
+                                    placeholder={`Paste the full job description here...\ne.g. 'Senior Frontend Engineer at Google requires proficiency in React, TypeScript, and large-scale system design...'`}
+                                    maxLength={5000}
+                                />
+                                <div className='char-counter'>{jobDescription.length} / 5000 chars</div>
+                            </div>
                         </div>
 
                         {/* Vertical Divider */}

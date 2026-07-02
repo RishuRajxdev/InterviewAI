@@ -129,7 +129,7 @@ const Interview = () => {
                         ))}
                     </div>
                     
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', width: '100%' }}>
+                    <div className='interview-nav__actions' style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', width: '100%' }}>
                         <button onClick={() => { getResumePdf(interviewId) }} className='button primary-button' style={{ width: '100%' }}>
                             <Download size={18} strokeWidth={2} />
                             Download Resume

@@ -1,4 +1,5 @@
 @use "sass:color";
+
 $bg-page: #000000;
 $bg-card: #0a0a0a;
 $bg-panel: #1a1a1a;
@@ -10,13 +11,7 @@ $accent: #ffffff;
 $accent-alt: #a3a3a3;
 $badge-required: #a3a3a3;
 $badge-best: #ffffff;
-$font-stack:
-  system-ui,
-  -apple-system,
-  BlinkMacSystemFont,
-  "Segoe UI",
-  Roboto,
-  sans-serif;
+$font-stack: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
 $radius-sm: 2px;
 $radius-md: 4px;
@@ -99,6 +94,7 @@ $radius-md: 4px;
   flex-direction: column;
   gap: 1.25rem;
   padding: 2rem;
+
   &__header {
     display: flex;
     align-items: center;
@@ -112,11 +108,37 @@ $radius-md: 4px;
       flex: 1;
     }
   }
+
   &__icon {
     display: flex;
     align-items: center;
     color: $text-muted;
   }
+
+  .textarea-wrapper {
+    position: relative;
+    display: flex;
+    flex: 1;
+    width: 100%;
+    min-height: 280px;
+
+    .char-counter {
+      position: absolute;
+      bottom: 0.75rem;
+      right: 0.75rem;
+      background-color: #ffffff;
+      color: #000000;
+      padding: 0.25rem 0.6rem;
+      border-radius: $radius-md;
+      font-size: 0.72rem;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+      pointer-events: none;
+      z-index: 5;
+    }
+  }
+
   &__textarea {
     flex: 1;
     width: 100%;
@@ -124,6 +146,7 @@ $radius-md: 4px;
     border: 1px solid transparent;
     border-radius: $radius-sm;
     padding: 1rem;
+    padding-bottom: 2.75rem;
     color: $text-primary;
     font-family: $font-stack;
     font-size: 0.875rem;
@@ -142,19 +165,10 @@ $radius-md: 4px;
     &--short {
       flex: unset;
       height: 96px;
+      padding-bottom: 1rem;
     }
   }
-  &--left {
-    position: relative;
-    .char-counter {
-      position: absolute;
-      bottom: 2.5rem;
-      right: 2.5rem;
-      font-size: 0.75rem;
-      font-variant-numeric: tabular-nums;
-      color: $text-muted;
-    }
-  }
+
   &--right {
     gap: 1rem;
   }
@@ -190,6 +204,7 @@ $radius-md: 4px;
   color: $text-muted;
   margin-bottom: 0.25rem;
 }
+
 .upload-section {
   display: flex;
   flex-direction: column;
@@ -267,6 +282,7 @@ $radius-md: 4px;
   flex-direction: column;
   gap: 0.5rem;
 }
+
 .info-box {
   display: flex;
   align-items: flex-start;
@@ -295,33 +311,47 @@ $radius-md: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 25rem;
+  width: 24rem;
   max-width: 100%;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
- background: linear-gradient(
-  135deg,
-  $accent 0%,
-  color.adjust($accent, $lightness: -10%) 100%
-);
-  color: black;
-  font-size: 0.9rem;
+  gap: 0.6rem;
+  padding: 0.85rem 1.75rem;
+  background: linear-gradient(
+    135deg,
+    $accent 0%,
+    color.adjust($accent, $lightness: -12%) 100%
+  );
+  color: #000000;
+  font-size: 0.925rem;
   font-weight: 600;
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
   font-family: $font-stack;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.18);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+    box-shadow: none;
   }
-
 }
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
+
 .icon-spin {
   width: 14px;
   height: 14px;
@@ -331,7 +361,6 @@ $radius-md: 4px;
   animation: spin 0.7s linear infinite;
   flex-shrink: 0;
 }
-
 
 .recent-reports {
   display: flex;
@@ -389,16 +418,34 @@ $radius-md: 4px;
   }
 }
 
+/* Responsive Fixes */
 @media (max-width: 768px) {
   .interview-card__body {
     flex-direction: column;
     min-height: auto;
   }
+
+  .panel {
+    padding: 1.5rem;
+    .textarea-wrapper {
+      min-height: 220px;
+    }
+  }
+
   .panel-divider {
     width: 100%;
     height: 1px;
   }
+
+  .interview-card__footer {
+    flex-direction: column-reverse;
+    gap: 1rem;
+    text-align: center;
+    padding: 1.25rem;
+  }
+
   .generate-btn {
     width: 100%;
+    padding: 0.95rem 1.5rem;
   }
 }
