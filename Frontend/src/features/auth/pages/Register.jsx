@@ -1,6 +1,7 @@
 import React,{useState} from 'react'
 import { useNavigate, Link } from 'react-router'
 import { useAuth } from '../hooks/useAuth'
+import { Loader2 } from 'lucide-react'
 
 const Register = () => {
 
@@ -17,13 +18,10 @@ const Register = () => {
         navigate("/")
     }
 
-  if (loading) {
+ if (loading) {
     return (
         <main className="flex min-h-screen items-center justify-center">
-            <div className="loading-screen flex flex-col items-center text-center">
-                <div className="spinner border-4 border-cyan-600/20 border-t-cyan-600 rounded-full h-12 w-12 animate-spin"></div>
-                <p className="text-cyan-600 mt-4 font-semibold">Please wait...</p>
-            </div>
+            <Loader2 className="h-12 w-12 animate-spin text-cyan-500" />
         </main>
     )
 }
